@@ -12,7 +12,7 @@ fn main() {
     let start = u8::MIN;
     let end = u8::MAX;
 
-    let mut msg: HashMap<char, Vec<(char, char)>> = HashMap::new();
+    let mut msg: HashMap<char, Vec<String>> = HashMap::new();
 
     for i in start..=end {
         for j in start..=end {
@@ -21,10 +21,10 @@ fn main() {
                 let vect = msg.get_mut(&(res as char));
                 match vect {
                     Some(v) => {
-                        v.push((i as char, j as char));
+                        v.push(format!("\n\t{:?} ^ {:?}", i as char, j as char));
                     }
                     None => {
-                        msg.insert(res as char, vec![(i as char, j as char)]);
+                        msg.insert(res as char, vec![format!("\n\t{:?} ^ {:?}", i as char, j as char)]);
                     }
                 }
             }
@@ -37,8 +37,8 @@ fn main() {
         let output = match outvec {
             Some(v) => {
                 let mut output = String::new();
-                for (i, j) in v {
-                    output.push_str(&format!("\n\t{:?} ^ {:?}", i, j));
+                for s in v {
+                    output.push_str(s);
                 }
                 format!("{} : {}", (*c as char), output)
             }
