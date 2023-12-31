@@ -21,10 +21,10 @@ fn main() {
                 let vect = msg.get_mut(&(res as char));
                 match vect {
                     Some(v) => {
-                        v.push(format!("\n\t{:?} ^ {:?}", i as char, j as char));
+                        v.push(format!("{:?} ^ {:?}", i as char, j as char));
                     }
                     None => {
-                        msg.insert(res as char, vec![format!("\n\t{:?} ^ {:?}", i as char, j as char)]);
+                        msg.insert(res as char, vec![format!("{:?} ^ {:?}", i as char, j as char)]);
                     }
                 }
             }
@@ -34,17 +34,16 @@ fn main() {
     let mut lock = std::io::stdout().lock();
     for c in want.iter() {
         let outvec = msg.get(&(*c as char));
-        let output = match outvec {
+        match outvec {
             Some(v) => {
-                let mut output = String::new();
+                writeln!(lock, "{sep}\n{:^width$}\n{sep}", format!("Output to: {}", (*c as char)), sep = seperator, width = seperator.len()).unwrap();
                 for s in v {
-                    output.push_str(s);
+                    writeln!(lock, "{:^width$}", s, width = seperator.len()).unwrap();
                 }
-                format!("{} : {}", (*c as char), output)
             }
-            None => format!("{} : Not found", (*c as char)),
+            None => {
+                writeln!(lock, "{:^width$} : {}", (*c as char), "Not found", width = seperator.len()).unwrap();
+            },
         };
-
-        writeln!(lock, "{:^width$}\n{}", output, seperator, width = seperator.len()).unwrap();
     }
 }
