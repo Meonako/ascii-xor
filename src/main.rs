@@ -1,10 +1,10 @@
 use std::{collections::HashMap, io::Write};
 
 fn main() {
-    let seperator = "-------------------------------------------------";
     let mut want = String::new();
     print!("Input: ");
-    std::io::stdout().flush().unwrap();
+    let mut stdout = std::io::stdout();
+    stdout.flush().unwrap();
     std::io::stdin().read_line(&mut want).unwrap();
 
     let want = want.trim().chars().map(|c| c as u8).collect::<Vec<_>>();
@@ -12,23 +12,24 @@ fn main() {
     let start = u8::MIN;
     let end = u8::MAX;
 
+    let mut lock = stdout.lock();
     for i in start..=end {
         let mut msg = HashMap::new();
         for j in start..=end {
             let res = i ^ j;
             if want.contains(&res) {
-                msg.insert(res as char, format!(r#""{}" ^ "{}""#, i as char, j as char));
+                msg.insert(res as char, format!(r"{:?} ^ {:?}", i as char, j as char));
             }
         }
         for c in want.iter() {
             let msg = if msg.contains_key(&(*c as char)) {
-                format!("  {} :   {}", (*c as char), msg[&(*c as char)])
+                msg[&(*c as char)].as_str()
             } else {
-                format!("  {} :   {}", (*c as char), "Not found")
+                "Not found"
             };
 
-            println!("{:^width$}", msg, width = seperator.len());
+            writeln!(lock, "\t{} :   {}", *c as char, msg).unwrap();
         }
-        println!("{}", seperator);
+        writeln!(lock, "-------------------------------------------------").unwrap();
     }
 }
