@@ -27,7 +27,6 @@ fn main() {
                         msg.insert(res as char, vec![(i as char, j as char)]);
                     }
                 }
-                // msg.insert(res as char, format!(r#""{}" ^ "{}""#, i as char, j as char));
             }
         }
     }
