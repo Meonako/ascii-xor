@@ -8,10 +8,13 @@ fn main() {
     std::io::stdin().read_line(&mut want).unwrap();
 
     let want = want.trim().chars().map(|c| c as u8).collect::<Vec<_>>();
+    
+    let start = u8::MIN;
+    let end = u8::MAX;
 
-    for i in 0..=255u8 {
+    for i in start..=end {
         let mut msg = HashMap::new();
-        for j in 0..=255u8 {
+        for j in start..=end {
             let res = i ^ j;
             if want.contains(&res) {
                 msg.insert(res as char, format!(r#""{}" ^ "{}""#, i as char, j as char));
